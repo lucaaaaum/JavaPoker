@@ -7,10 +7,11 @@ public class Jogador
 	private String titulo;
 
 	public Jogador(String nome, int fichas){
+		this.nome = nome;
 	    this.fichas = fichas;
 	    this.mao = new Mao(new Carta[5]);
 	    this.ativo = true;
-	    this.titulo = "";
+	    this.titulo = "Padrão";
 	}
 	
 	public void verificaAtivo(){
@@ -19,12 +20,17 @@ public class Jogador
 	}
 	
 	public int aposta(int quantidade){
-		fichas -= quantidade;
-	    return quantidade;
-	}	
+		if (fichas - quantidade >= 0) {
+			fichas -= quantidade;	
+		} else {
+			quantidade = fichas;
+			fichas = 0;
+		}
+		return quantidade;
+	}
 	
-	public Carta trocaCarta(int indexCarta) {
-		
+	public Carta trocaCarta() {
+		return null;
 	}
 	
 	public String getNome(){

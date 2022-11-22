@@ -1,18 +1,25 @@
 public class Mesa
 {
 	private Jogador[] jogadores;
+	private Dealer dealer;
+	private Usuario usuario;
+	private int posicaoDealer;
+	private int posicaoUsuario;
 	private int pote;
 
 	public Mesa(Jogador[] jogadores, int pote){
 		this.jogadores = jogadores;
 		this.pote = pote;
+		posicaoDealer = encontraDealer();
+		dealer = new Dealer();
+		posicaoUsuario = encontraUsuario();
+		usuario = (Usuario) jogadores[posicaoUsuario];
 	}
 
 	public void iniciaJogo() {
-		((Dealer)jogadores[encontraDealer()]).embaralhar();
-		
+		dealer.embaralhar();
 		defineTitulos();
-		
+
 		while (getAtivos() > 1) {
 			iniciaRodada();
 		}
@@ -20,13 +27,19 @@ public class Mesa
 	
 	public int encontraDealer() {
 		for (int i = 0; i < jogadores.length; i++)
-			if (jogadores[i] instanceof Dealer)
+			if (jogadores[i].getTitulo().equalsIgnoreCase("Dealer"))
+				return i;
+		return 0;
+	}
+	
+	public int encontraUsuario() {
+		for (int i = 0; i < jogadores.length; i++)
+			if (jogadores[i] instanceof Usuario)
 				return i;
 		return 0;
 	}
 	
 	public void defineTitulos() {
-		int posicaoDealer = encontraDealer();
 		(jogadores[posicaoDealer]).setTitulo("Dealer");
 		(jogadores[andarHorario(posicaoDealer, 1)]).setTitulo("SB");
 		(jogadores[andarHorario(posicaoDealer, 2)]).setTitulo("BB");
@@ -42,23 +55,25 @@ public class Mesa
 	
 	public void iniciaRodada() {
 		distribuiCartas();
+		usuario.imprimeInfo();
+		usuario.getMao().imprimeCartas();
 		apostaInicial();
 		etapaDeTrocas();
+		Teclado.leString("fim da rodada");
 	}
   
 	public void apostaInicial() {
-		int posicaoDealer = encontraDealer();
-		pote += (jogadores[andarHorario(posicaoDealer, 1)]).aposta(5);
-		pote += (jogadores[andarHorario(posicaoDealer, 2)]).aposta(10);
+		Jogador smallBlind = jogadores[andarHorario(posicaoDealer, 1)];
+		Jogador bigBlind = jogadores[andarHorario(posicaoDealer, 2)];
+		int apostaBigBlind = bigBlind.aposta(10);
+		int apostaSmallBlind = smallBlind.aposta(apostaBigBlind/2);
+		Utilitarios.imprimeCaixaTexto(new String[] {bigBlind.getTitulo()+" "+bigBlind.getNome()+" apostou "+apostaBigBlind+".",
+													smallBlind.getTitulo()+" "+smallBlind.getNome()+" apostou "+apostaSmallBlind+"."},
+									 "APOSTA INICIAL");
 	}
 
 	public void distribuiCartas() {
-		int posicaoDealer = 0;
-		for (int i = 0; i < jogadores.length; i++)
-			if (jogadores[i] instanceof Dealer)
-				posicaoDealer = i;
-		
-		Baralho baralho = ((Dealer)jogadores[posicaoDealer]).getBaralho();
+		Baralho baralho = dealer.getBaralho();
 		Carta[] cartas = baralho.getCartas();
 	 
 		int contaCartas = 0;
@@ -66,25 +81,29 @@ public class Mesa
 			Mao mao = jogadores[i].getMao();
 			for (int j = 0; j < mao.getCartas().length; j++) {
 				mao.insereCarta(cartas[contaCartas]);
+				cartas[contaCartas] = null;
 				contaCartas++;
 			}
-			System.out.println("Mão " + i);
-			mao.imprimeMao();
+			mao.ordenaMao();
 		}
-		
-		ordenaMaos();
-	}
-	
-	public void ordenaMaos() {
-		for (Jogador jogador : jogadores) {
-			jogador.getMao().ordenaCartas();
-		}
+
+		baralho.setCartas(cartas);
+		dealer.ordenar();
 	}
   
 	public void etapaDeTrocas() {
 		for (Jogador jogador : jogadores) {
-			
+			Carta cartaDevolvida = jogador.trocaCarta();
+			if (cartaDevolvida != null)
+				troca(cartaDevolvida, jogador);
 	  	}
+		dealer.ordenar();
+	}
+	
+	public void troca(Carta cartaDevolvida, Jogador jogador) {
+		dealer.devolveCarta(cartaDevolvida);
+		Carta cartaNova = jogador.getMao().insereCarta(dealer.retiraCarta());
+		Utilitarios.imprimeCaixaTexto(jogador.getNome()+" trocou "+cartaDevolvida.toString()+" por "+cartaNova.toString(), "TROCA");
 	}
   
 	public int getAtivos() {

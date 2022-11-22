@@ -1,38 +1,66 @@
-public class Mao
+public class Mao extends Baralho
 {
-	private Carta[] cartas;
-
+	String tipo;
+	int forca;
+	
 	public Mao(Carta[] cartas){
-		this.cartas = cartas; //ordenaCartas(cartas);
+		super(cartas);
+		tipo = "PADRÃO";
 	}
 
-	public void ordenaCartas() {
+	@Override public Carta insereCarta(Carta carta) {
+		for (int i = 0; i < getCartas().length; i++)
+			if (getCartas()[i] == null) {
+				getCartas()[i] = carta;
+				break;
+			}
+		return carta;
+	}
+	
+	public Carta retiraCarta(int indice) {
+		Carta retorno = getCartas()[indice];
+		getCartas()[indice] = null;
+		return retorno;
+	}
+	
+	public void ordenaMao() {
 		ordenaNumericamente();
-		ordenaNaipe();
+		//ordenaNaipe();
 	}
   
-	private void ordenaNumericamente() {
-		Carta menor = cartas[0];
-		Carta temp = null;
-	  
-		for (int i = 1; i < cartas.length; i++) {
-			if (menor.getNumero() < cartas[i].getNumero()) {
-				temp = menor;
-				menor = cartas[i];
-				cartas[i] = temp;
-			}
+	@Override public void imprimeCartas(){
+		String[] textos = new String[getCartas().length];
+		for (int i = 0; i < getCartas().length; i++){
+			if (getCartas()[i] != null)
+				textos[i] = "["+i+"] == "+getCartas()[i].toString();				
+			else
+				textos[i] = "["+i+"] = Não tem carta aqui.";
 		}
+		Utilitarios.imprimeCaixaTexto(textos, tipo);
+	}
+	
+	private void ordenaNumericamente() {
+		Carta temp = null;
+		
+		for (int i = 0; i < getCartas().length; i++)
+			for (int j = (i+1); j < getCartas().length; j++) {
+				if (getCartas()[i].getNumero() > getCartas()[j].getNumero()) {
+					temp = getCartas()[i];
+					getCartas()[i] = getCartas()[j];
+					getCartas()[j] = temp;
+				}
+			}
 	}
   
 	private void ordenaNaipe() {
-		Carta menor = cartas[0];
+		Carta menor = getCartas()[0];
 		Carta temp = null;
 	  
-		for (int i = 1; i < cartas.length; i++) {
-			if (charParaInt(menor.getNaipe()) > charParaInt(cartas[i].getNaipe()) && menor.getNumero() == cartas[i].getNumero()) {
+		for (int i = 1; i < getCartas().length; i++) {
+			if (charParaInt(menor.getNaipe()) > charParaInt(getCartas()[i].getNaipe()) && menor.getNumero() == getCartas()[i].getNumero()) {
 				temp = menor;
-				menor = cartas[i];
-				cartas[i] = temp;
+				menor = getCartas()[i];
+				getCartas()[i] = temp;
 			}
 		}
 	}
@@ -44,61 +72,76 @@ public class Mao
 				return i;
 		return 'C';
 	}
-  
-	public void insereCarta(Carta carta){
-		for (int i = 0; i < cartas.length; i++)
-			if (cartas[i] == null) {
-				cartas[i] = carta;
-				break;
-			}
-	}
 	
 	public void trocaCarta(int indiceCarta, Carta carta) {
-		cartas[indiceCarta] = carta;
+		getCartas()[indiceCarta] = carta;
 	}
   
-	public String verificaTipo() {
-		if (verificaRoyalFlush())
-			return "Royal Flush";
-	  
-		return "Uma porcaria";
+	public void verificaTipo() {
+		if (verificaRoyalFlush()) {
+			setTipo("ROYAL FLUSH");
+			setForca(100);
+		} else if (verificaStraightFlush()) {
+			setTipo("STRAIGHT FLSUH");
+			setForca(90);
+		}
 	}
   
 	private boolean verificaRoyalFlush() {
-		return true;  
+		if (maiorQuantidadeMesmoNaipe() == 5) {
+			int inicial = 10;
+			for (int i = 0; i < getCartas().length; i++) {
+				if (getCartas()[i].getNumero() != (inicial + i))
+					return false;
+			}
+			return true;
+		}
+		return false;
 	}
   
 	private boolean verificaStraightFlush() {
-		return true;
+		if (maiorQuantidadeMesmoNaipe() == 5) {
+			int anterior = getCartas()[0].getNumero();
+			for (int i = 1; i < getCartas().length; i++) {
+				if (getCartas()[i].getNumero() != (anterior + 1))
+					return false;
+				anterior = getCartas()[i].getNumero();
+			}
+		}
+		return false;
 	}
   
-	private int quantidadeMesmoNaipe() {
-		int quantidade = 0;
-		char[] naipes = new char[cartas.length];
-	  
-		for (int i = 0; i < cartas.length; i++) {
-			naipes[i] = cartas[i].getNaipe();  
-		}
-	  
-		for (char naipe : naipes) {
-			if (naipes[0] != naipe)
-				quantidade++;
-		}
-	  
-		return quantidade;
-	}
-  
-	public void imprimeMao(){
-		for (Carta c : cartas){
-			c.imprimeCarta();
-		}
-	}
-  
-	public Carta[] getCartas(){
-		return cartas;
+	private int maiorQuantidadeMesmoNaipe() {
+		int[] quantidades = new int[4];
+		int posicao = 0;
+		
+		for (int i = 0; i < getCartas().length; i++)
+			for (int j = i; j < getCartas().length; j++)
+				if (getCartas()[i].getNaipe() == getCartas()[j].getNaipe())
+					quantidades[getCartas()[i].naipeToInt()]++;
+		
+		int maior = quantidades[0];
+		for (int i = 1; i < quantidades.length; i++)
+			if (quantidades[i] > maior)
+				maior = quantidades[i];
+		
+		return maior;
 	}
 
-	public void setCartas(Carta[] cartas){
-		this.cartas = cartas;
+	public String getTipo() {
+		return tipo;
 	}
+
+	public int getForca() {
+		return forca;
+	}
+	
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
+	public void setForca(int forca) {
+		this.forca = forca;
+	}
+	
 }

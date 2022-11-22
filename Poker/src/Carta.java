@@ -15,9 +15,6 @@ public class Carta
 	public String toString(){
 		String nome = "";
 		switch (numero){
-			case 1:
-				nome += "√Ås";
-				break;
 			case 11:
 				nome += "Valete";
 				break;
@@ -27,6 +24,9 @@ public class Carta
 			case 13:
 				nome += "Rei";
 				break;
+			case 14:
+				nome += "¡s";
+				break;
 			default:
 				nome += (numero);
 				break;
@@ -34,24 +34,37 @@ public class Carta
 
 		nome += " de ";
 
-		if (numero != 14){
-			switch (naipe){
-				case 'C':
-					nome += "Copas";
-					break;
-				case 'O':
-					nome += "Ouro";
-					break;
-				case 'P':
-					nome += "Paus";
-					break;
-				case 'E':
-					nome += "Espadas";
-					break;
-			}
+		switch (naipe){
+			case 'C':
+				nome += "Copas";
+				break;
+			case 'O':
+				nome += "Ouro";
+				break;
+			case 'P':
+				nome += "Paus";
+				break;
+			case 'E':
+				nome += "Espadas";
+				break;
 		}
 		
 		return nome;
+	}
+	
+	public int naipeToInt() {
+		switch (naipe) {
+		case 'C':
+			return 0;
+		case 'O':
+			return 1;
+		case 'P':
+			return 2;
+		case 'E':
+			return 3;
+		default:
+			return 0;
+		}
 	}
   
 	public char getNaipe(){
