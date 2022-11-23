@@ -11,21 +11,25 @@ public class Usuario extends Jogador
 	public @Override Carta trocaCarta() {
 		int indiceCarta = 0;
 		boolean resposta = Utilitarios.perguntaBooleana("Deseja trocar alguma carta?");
-	
-		if (resposta)
-			indiceCarta = Utilitarios.perguntaNumerica("Digite o nÃºmero da carta", 0, (getMao().getCartas().length-1));
-		else
+
+		if !(resposta)
 			return null;
 
+		int quantidade = Utilitarios.perguntaNumerica("Quantas cartas vocÃª deseja trocar?", 1, (getMao().getCartas().length-1));
+		int[] numerosCartas = new int[quantidade];
+		for (int i = 0; i < quantidade; i++) {
+			indiceCarta = Utilitarios.perguntaNumerica("Qual carta?", 0, (getMao().getCartas().length-1));	
+		}
+		
 		return getMao().retiraCarta(indiceCarta);
 	}
 	
 	public void imprimeInfo() {
 		String[] info = new String[] {
 				"Nome: "+getNome(),
-				"Título: "+getTitulo(),
+				"Tï¿½tulo: "+getTitulo(),
 				"Fichas: "+getFichas()
 		};
-		Utilitarios.imprimeCaixaTexto(info, "INFORMAÇÕES DO USUÁRIO");
+		Utilitarios.imprimeCaixaTexto(info, "INFORMAÃ‡Ã•ES DO USUÃRIO");
 	}
 }

@@ -11,7 +11,7 @@ class Main
 		Random rd = new Random();
 		Jogador[] jogadores = new Jogador[5];
 		
-		jogadores[0] = new Usuario(Teclado.leString("Digite o seu nome:"), 200);
+		jogadores[0] = new Usuario(Utilitarios.perguntaString("Digite o seu nome:"), 200);
 		jogadores[0].setTitulo("Dealer");
 
 		for (int i = 1; i < jogadores.length; i++){

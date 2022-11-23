@@ -25,7 +25,7 @@ public class Carta
 				nome += "Rei";
 				break;
 			case 14:
-				nome += "¡s";
+				nome += "√Ås";
 				break;
 			default:
 				nome += (numero);

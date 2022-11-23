@@ -41,8 +41,8 @@ public class Mesa
 	
 	public void defineTitulos() {
 		(jogadores[posicaoDealer]).setTitulo("Dealer");
-		(jogadores[andarHorario(posicaoDealer, 1)]).setTitulo("SB");
-		(jogadores[andarHorario(posicaoDealer, 2)]).setTitulo("BB");
+		(jogadores[andarHorario(posicaoDealer, 1)]).setTitulo("Small Blind");
+		(jogadores[andarHorario(posicaoDealer, 2)]).setTitulo("Big Blind");
 	}
 
 	public int andarHorario(int posicaoInicial, int casas) {
@@ -59,6 +59,9 @@ public class Mesa
 		usuario.getMao().imprimeCartas();
 		apostaInicial();
 		etapaDeTrocas();
+		usuario.imprimeInfo();
+		usuario.getMao().imprimeCartas();
+		resetaCartas();
 		Teclado.leString("fim da rodada");
 	}
   
@@ -85,6 +88,7 @@ public class Mesa
 				contaCartas++;
 			}
 			mao.ordenaMao();
+			mao.verificaTipo();
 		}
 
 		baralho.setCartas(cartas);
@@ -103,7 +107,14 @@ public class Mesa
 	public void troca(Carta cartaDevolvida, Jogador jogador) {
 		dealer.devolveCarta(cartaDevolvida);
 		Carta cartaNova = jogador.getMao().insereCarta(dealer.retiraCarta());
+		jogador.getMao().ordenaMao();
 		Utilitarios.imprimeCaixaTexto(jogador.getNome()+" trocou "+cartaDevolvida.toString()+" por "+cartaNova.toString(), "TROCA");
+	}
+
+	public void resetaCartas() {
+		dealer.setBaralho(dealer.alimentaBaralho());
+		for (Jogador jogador : jogadores)
+			jogador.resetaCartas();
 	}
   
 	public int getAtivos() {

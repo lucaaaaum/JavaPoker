@@ -11,7 +11,7 @@ public class Jogador
 	    this.fichas = fichas;
 	    this.mao = new Mao(new Carta[5]);
 	    this.ativo = true;
-	    this.titulo = "Padr„o";
+	    this.titulo = "Padr√£o";
 	}
 	
 	public void verificaAtivo(){
@@ -31,6 +31,14 @@ public class Jogador
 	
 	public Carta trocaCarta() {
 		return null;
+	}
+
+	public void resetaCartas() {
+		Carta[] cartas = mao.getCartas();
+		for (int i = 0; i < cartas.length; i++) {
+			cartas[i] = null;
+		}
+		setMao(new Mao(cartas));
 	}
 	
 	public String getNome(){

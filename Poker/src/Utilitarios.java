@@ -107,13 +107,19 @@ public class Utilitarios
 				return resposta;
 		}
 	}
+
+	public static String perguntaString(String pergunta) {
+			imprimeCaixaTexto(pergunta);
+			String resposta = Teclado.leString();
+			return resposta;
+	}
 	
 	public static void respostaInvalida() {
-		Teclado.leString("RESPOSTA INVÃ�LIDA. APERTE ENTER PARA TENTAR NOVAMENTE.");
+		Teclado.leString("RESPOSTA INVÁLIDA. APERTE ENTER PARA TENTAR NOVAMENTE.");
 	}
 	
 	public static void respostaInvalida(String motivo) {
-		Teclado.leString("RESPOSTA INVÃ�LIDA: "+motivo.toUpperCase()+". APERTE ENTER PARA TENTAR NOVAMENTE.");
+		Teclado.leString("RESPOSTA INVÁLIDA: "+motivo.toUpperCase()+". APERTE ENTER PARA TENTAR NOVAMENTE.");
 	}
 	
 	private static String[] opcoesBooleanasPositivas() {
@@ -130,7 +136,7 @@ public class Utilitarios
 	
 	private static String[] opcoesBooleanasNegativas() {
 		String[] retorno = new String[5];
-		retorno[0] = "NÃƒO";
+		retorno[0] = "NÃO";
 		retorno[1] = "NAO";
 		retorno[2] = "NO";
 		retorno[3] = "NAH";

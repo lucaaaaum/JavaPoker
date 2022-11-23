@@ -5,7 +5,7 @@ public class Mao extends Baralho
 	
 	public Mao(Carta[] cartas){
 		super(cartas);
-		tipo = "PADRÃO";
+		tipo = "PADRÃƒO";
 	}
 
 	@Override public Carta insereCarta(Carta carta) {
@@ -34,7 +34,7 @@ public class Mao extends Baralho
 			if (getCartas()[i] != null)
 				textos[i] = "["+i+"] == "+getCartas()[i].toString();				
 			else
-				textos[i] = "["+i+"] = Não tem carta aqui.";
+				textos[i] = "["+i+"] = NÃ£o tem carta aqui.";
 		}
 		Utilitarios.imprimeCaixaTexto(textos, tipo);
 	}
@@ -82,9 +82,19 @@ public class Mao extends Baralho
 			setTipo("ROYAL FLUSH");
 			setForca(100);
 		} else if (verificaStraightFlush()) {
-			setTipo("STRAIGHT FLSUH");
+			setTipo("STRAIGHT FLUSH");
 			setForca(90);
+		} else if (verificaQuadra()) {
+			setTipo("FOUR OF A KIND");
+			setForca(80);
+		} else if (verificaCor()) {
+			setTipo("FLUSH");
+			setForca(70);
+		} else if (verificaSequencia()) {
+			setTipo("SEQUÃŠNCIA");
+			setForca(60);
 		}
+			
 	}
   
 	private boolean verificaRoyalFlush() {
@@ -101,14 +111,45 @@ public class Mao extends Baralho
   
 	private boolean verificaStraightFlush() {
 		if (maiorQuantidadeMesmoNaipe() == 5) {
-			int anterior = getCartas()[0].getNumero();
+			int inicial = getCartas()[0].getNumero();
 			for (int i = 1; i < getCartas().length; i++) {
-				if (getCartas()[i].getNumero() != (anterior + 1))
-					return false;
-				anterior = getCartas()[i].getNumero();
+				if (getCartas()[i].getNumero() != (inicial + i)) {
+					System.out.println(getCartas()[i].getNumero());
+					System.out.println(inicial+i);
+					return false;					
+				}
 			}
+			return true;
 		}
 		return false;
+	}
+
+	private boolean verificaQuadra() {
+		if (maiorQuantidadeMesmoNaipe() == 4) {
+			int inicial = getCartas()[0].getNumero();
+			int contaIguais = 0;
+			for (int i = 1; i < getCartas().length; i++)
+				if (getCartas()[i].getNumero() == inicial)
+					contaIguais++;
+			if (contaIguais == 4)
+				return true;
+		}
+		return false;
+	}
+
+	private boolean verificaCor() {
+		if (maiorQuantidadeMesmoNaipe() == 5)
+			return true;
+		return false;
+	}
+
+	private boolean verificaSequencia() {
+		int inicial = getCartas()[0].getNumero();
+		for (int i = 1; i < getCartas().length; i++) {
+			if (getCartas()[i].getNumero() != (inicial + i))
+				return false;
+		}
+		return true;
 	}
   
 	private int maiorQuantidadeMesmoNaipe() {
@@ -127,7 +168,7 @@ public class Mao extends Baralho
 		
 		return maior;
 	}
-
+	
 	public String getTipo() {
 		return tipo;
 	}

@@ -29,7 +29,7 @@ public class Baralho
 					cartas[j] != null &&
 					cartas[i].getNaipe() == cartas[j].getNaipe() &&
 					cartas[i].getNumero() == cartas[j].getNumero())
-					System.out.println("A CARTA ["+i+"] == "+cartas[i].toString()+" É IGUAL À CARTA ["+j+"] == "+cartas[j].toString());
+					System.out.println("A CARTA ["+i+"] == "+cartas[i].toString()+" Ã‰ IGUAL Ã€ CARTA ["+j+"] == "+cartas[j].toString());
 			}
 		}
 	}
@@ -40,6 +40,7 @@ public class Baralho
 				cartas[i] = carta;
 				break;
 			}
+		imprimeCartas();
 		return carta;
 	}
 	
@@ -61,21 +62,23 @@ public class Baralho
 			if (cartas[i] != null)
 				textos[i] = "["+i+"] == "+cartas[i].toString();				
 			else
-				textos[i] = "["+i+"] = Não tem carta aqui.";
+				textos[i] = "["+i+"] = NÃ£o tem carta aqui.";
 		}
 		Utilitarios.imprimeCaixaTexto(textos);
 	}
   
 	public void ordenaNull() {
+		//imprimeCartas();
 		for (int i = 0; i < cartas.length; i++) {
 			if (cartas[i] == null)
-				for (int j = (i+1); j < cartas.length; j++)
+				for (int j = i; j < cartas.length; j++)
 					if (cartas[j] != null) {
 						cartas[i] = cartas[j];
 						cartas[j] = null;
 						break;
 					}
 		}
+		//imprimeCartas();
 	}
 	
 	
