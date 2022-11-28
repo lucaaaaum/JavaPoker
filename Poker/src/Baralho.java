@@ -40,7 +40,6 @@ public class Baralho
 				cartas[i] = carta;
 				break;
 			}
-		imprimeCartas();
 		return carta;
 	}
 	

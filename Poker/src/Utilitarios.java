@@ -2,6 +2,7 @@ public class Utilitarios
 {
 	private static int tamanho = 50;
 	private static char c = '-';
+	private static int sleepTime = 1;
 	
 	public static void imprimeCaixaTexto(String texto) {
 		imprimeLinha();
@@ -13,6 +14,20 @@ public class Utilitarios
 		imprimeLinha();
 		for (String texto : textos)
 			imprimeTexto(texto);
+		imprimeLinha();
+	}
+	
+	public static void imprimeCaixaTexto(int[] numeros) {
+		imprimeLinha();
+		for (int numero : numeros)
+			imprimeTexto(Integer.toString(numero));
+		imprimeLinha();
+	}
+	
+	public static void imprimeCaixaTexto(int[] numeros, String titulo) {
+		imprimeTitulo(titulo);
+		for (int numero : numeros)
+			imprimeTexto(Integer.toString(numero));
 		imprimeLinha();
 	}
 	
@@ -31,13 +46,18 @@ public class Utilitarios
 	
 	private static void imprimeLinha() {
 		for (int i = 0; i < (tamanho); i++)
+		{
 			System.out.print(c);
+			sleep(sleepTime);
+		}		
 		System.out.println();
 	}
 	
 	private static void imprimeLinha(int tamanho) {
-		for (int i = 0; i < (tamanho); i++)
+		for (int i = 0; i < (tamanho); i++) {
 			System.out.print(c);
+			sleep(sleepTime);
+		}	
 	}
 	
 	public static void imprimeTexto(String texto) {
@@ -51,6 +71,7 @@ public class Utilitarios
 				System.out.println(" "+c);
 				tamanhoLinhaAtual = 0;
 			}
+			sleep(sleepTime);
 		}
 		preencheLinha(tamanho - (tamanhoLinhaAtual + 2));
 	}
@@ -63,14 +84,18 @@ public class Utilitarios
 	}
 	
 	public static void preencheLinha(int tamanho) {
-		for (int i = 0; i < (tamanho-1); i++)
+		for (int i = 0; i < (tamanho-1); i++) {
+			sleep(sleepTime);
 			System.out.print(' ');
+		}
 		System.out.println(c);
 	}
 	
 	public static void preencheLinha(int tamanho, char caractere) {
-		for (int i = 0; i < (tamanho-1); i++)
+		for (int i = 0; i < (tamanho-1); i++) {
+			sleep(sleepTime);
 			System.out.print(caractere);
+		}
 		System.out.println(c);
 	}
 	
@@ -97,6 +122,20 @@ public class Utilitarios
 	public static int perguntaNumerica(String pergunta, int limiteInferior, int limiteSuperior) {
 		while (true) {
 			imprimeCaixaTexto(pergunta);
+			
+			int resposta = Teclado.leInt();			
+			if (resposta < limiteInferior)
+				respostaInvalida("NÃšMERO MUITO PEQUENO");
+			else if (resposta > limiteSuperior)
+				respostaInvalida("NÃšMERO MUITO GRANDE");
+			else
+				return resposta;
+		}
+	}
+	
+	public static int perguntaNumerica(String pergunta, int limiteInferior, int limiteSuperior, String titulo) {
+		while (true) {
+			imprimeCaixaTexto(pergunta, titulo);
 			
 			int resposta = Teclado.leInt();			
 			if (resposta < limiteInferior)
@@ -143,4 +182,21 @@ public class Utilitarios
 		retorno[4] = "NEM";
 		return retorno;
 	}
+	
+    public static void sleep(int sleepTime) {
+        try {
+            Thread.sleep(sleepTime);
+        } catch(Exception e){}
+    }
+    
+    public static void limpaConsole() {
+    	System.out.println("\u000C");
+    }
+    
+    public static int[] incrementaArray(int[] array) {
+    	int[] retorno = new int[array.length+1];
+    	for (int i = 0; i < array.length; i++)
+    		retorno[i] = array[i];
+    	return retorno;
+    }
 }

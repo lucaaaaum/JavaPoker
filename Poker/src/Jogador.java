@@ -15,8 +15,8 @@ public class Jogador
 	}
 	
 	public void verificaAtivo(){
-	if (fichas <= 0)
-      ativo = false;
+		if (fichas <= 0)
+	      ativo = false;
 	}
 	
 	public int aposta(int quantidade){
@@ -29,7 +29,21 @@ public class Jogador
 		return quantidade;
 	}
 	
-	public Carta trocaCarta() {
+	public int aposta() {
+		return 0;
+	}
+	
+	public int apostaInicial(int quantidade){
+		if (fichas - quantidade >= 0) {
+			fichas -= quantidade;	
+		} else {
+			quantidade = fichas;
+			fichas = 0;
+		}
+		return quantidade;
+	}
+	
+	public Carta[] trocaCarta() {
 		return null;
 	}
 

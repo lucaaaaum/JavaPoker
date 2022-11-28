@@ -4,6 +4,7 @@ class Main
 {
 	public static void main(String[] args) {
 		Mesa mesa = new Mesa(alimentaMesa(), 0);
+		Utilitarios.limpaConsole();
 		mesa.iniciaJogo();
 	}
 

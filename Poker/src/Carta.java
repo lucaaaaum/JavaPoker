@@ -2,7 +2,7 @@ public class Carta
 {
 	private char naipe;
 	private int numero;
-
+	
 	public Carta(char naipe, int numero){
 		this.naipe = naipe;
 		this.numero = numero;

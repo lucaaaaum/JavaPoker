@@ -25,7 +25,7 @@ public class Teclado
          }
          catch (NumberFormatException e)
          {
-             System.out.println ("o valor digitado deve ser inteiro: "+e );
+             //System.out.println ("o valor digitado deve ser inteiro: "+e );
          }
          return (a);
      }
@@ -48,7 +48,7 @@ public class Teclado
          }
          catch (NumberFormatException e)
          {
-             System.out.println ("o valor digitado deve ser inteiro: "+e );
+             //System.out.println ("o valor digitado deve ser inteiro: "+e );
          }
          return (a);
      }
